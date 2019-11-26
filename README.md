@@ -1,0 +1,3 @@
+# Project_Java_Content_Based_Recommendation_Algorithm
+# Artykuły:
+https://www.researchgate.net/publication/261149618_Content-Based_Filtering_Recommendation_Algorithm_Using_HMM
