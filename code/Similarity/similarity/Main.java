@@ -7,6 +7,7 @@ public class Main {
 
         //List of movies' ids which were scored by user
         ArrayList<Integer> userScoredMovies = new ArrayList<>();
+
         userScoredMovies.add(318);
         userScoredMovies.add(356);
         userScoredMovies.add(296);
@@ -38,10 +39,9 @@ public class Main {
         userScoredMovies.add(6874);
         userScoredMovies.add(10);
 
-        //Test
-        Similarity test = new Similarity(userScoredMovies);
-        //Calculating similarity matrix, from movie-user rating table
-        test.calculateSimilarity("/home/jan/Pulpit/ml-latest/ramka.csv");
+        //Calculating similarity matrix, from movie-user ratings table
+        Similarity similarityMatrix = new Similarity(userScoredMovies);
+        similarityMatrix.calculateSimilarity("/home/piotr/Pobrane/ramka.csv");
 
     }
 }
