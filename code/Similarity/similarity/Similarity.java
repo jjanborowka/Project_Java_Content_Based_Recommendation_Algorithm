@@ -15,13 +15,30 @@ public class Similarity {
 
         //Opening of first reader which will read rows with movies scored by user (30 movies)
         BufferedReader br1 = new BufferedReader(new FileReader(pathToCSV));
-
+        BufferedReader br3 = new BufferedReader(new FileReader(pathToCSV));
         //tutaj omijam pierwsza linie, nwm w sumie chyba tak zostanie
         br1.readLine();
         String line = null;
 
         //Opening writer to append calculated similarities directly to csv file
-        FileWriter writer = new FileWriter("/home/piotr/Pulpit/wynik.csv");
+        FileWriter writer = new FileWriter("/home/jan/Pulpit/wynik.csv");
+
+        //Adding movieindex as firs rwo
+        br3.readLine();
+        String line11 = null;
+        writer.append("-");
+        writer.append(",");
+        while ((line11 = br3.readLine()) != null) {
+
+            //Row to array of string
+            String[] row1 = line11.split(",");
+            //Getting current movie index from first place of each row
+            //because it's read as "1", using substring
+            String movieIndex1 = row1[0].substring(1, row1[0].length()-1);
+            writer.append(movieIndex1);
+            writer.append(",");
+        }
+        writer.append("\n");
 
         //Start of br1 reading
         while ((line = br1.readLine()) != null) {
