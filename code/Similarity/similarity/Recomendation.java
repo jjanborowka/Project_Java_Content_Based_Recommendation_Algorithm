@@ -55,7 +55,7 @@ public class Recomendation {
                     sum += Double.valueOf(row2[i]);}
             }
             //Calculating final prediction for selected movie
-            Double final_prediction = sum_rate ;
+            Double final_prediction = sum_rate/sum ;
 
             // Adding to selected recomendation
 
