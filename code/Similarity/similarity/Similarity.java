@@ -15,7 +15,7 @@ public class Similarity {
     void calculateSimilarity(String pathToCSV) throws IOException {
 
         //Opening writer to append calculated similarities directly to csv file
-        FileWriter writer = new FileWriter("/home/piotr/IdeaProjects/Projekt_java/similarityMatrix.csv");
+        FileWriter writer = new FileWriter("/home/jan/Pulpit/similarityMatrix1.csv");
 
         //Additional reader to read all movies scored by user
         BufferedReader br1 = new BufferedReader(new FileReader(pathToCSV));
@@ -38,7 +38,7 @@ public class Similarity {
 
                 //Getting current movie index from first place of each row
                 //because it's read as "1", using substring
-                String movieIndex1 = row1[0].substring(1, row1[0].length() - 1);
+                String movieIndex1 = row1[1];
                 writer.append(",");
                 writer.append(movieIndex1);
 
@@ -61,7 +61,7 @@ public class Similarity {
 
             //Getting current movie index from first place of each row
             //because it's read as "1", using substring
-            String movieIndex = row[0].substring(1, row[0].length()-1);
+            String movieIndex = row[1];
 
             //Starting new line in result csv with movie index
             writer.append(movieIndex);
@@ -81,7 +81,7 @@ public class Similarity {
 
                 //Iterating through all values of ratings given by users
                 //which means iterating the rows
-                for (int j = 1; j < n; j++) {
+                for (int j = 2; j < n; j++) {
 
                     //Vectors used to calculate cosine similarity
                     //must contain only these ratings which were given

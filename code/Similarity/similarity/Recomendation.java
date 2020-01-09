@@ -55,11 +55,11 @@ public class Recomendation {
                     sum += Double.valueOf(row2[i]);}
             }
             //Calculating final prediction for selected movie
-            Double final_prediction = sum_rate / sum;
+            Double final_prediction = sum_rate ;
 
             // Adding to selected recomendation
 
-            // not enought movie was alredy selected
+            // not enough movie was alredy selected
             if (zwrot.size() < number_of_recomendation) {
                 zwrot.put(movieIndex1, final_prediction);
             }
