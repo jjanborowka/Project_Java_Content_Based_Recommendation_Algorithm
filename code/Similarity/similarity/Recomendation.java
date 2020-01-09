@@ -47,7 +47,7 @@ public class Recomendation {
             Double sum = Double.valueOf(0);
             Double sum_rate= Double.valueOf(0);
 
-            for (int i = 1; i < 31; i++) {
+            for (int i = 1; i < row2.length; i++) {
                 // Geting userscore mvoie
                 Double userscore = usersScores.get(MoviesId[i]);
                 sum_rate += (Double.valueOf(userscore) * Double.valueOf(row2[i]));
@@ -55,9 +55,10 @@ public class Recomendation {
                     sum += Double.valueOf(row2[i]);}
             }
             //Calculating final prediction for selected movie
-            Double final_prediction = sum_rate/sum ;
+            Double final_prediction = sum_rate ;
 
             // Adding to selected recomendation
+
 
             // not enough movie was alredy selected
             if (zwrot.size() < number_of_recomendation) {
@@ -84,6 +85,7 @@ public class Recomendation {
 
 
         }
+        br1.close();
         return zwrot;
     }
 }

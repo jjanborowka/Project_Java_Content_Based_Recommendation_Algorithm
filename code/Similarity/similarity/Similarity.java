@@ -115,6 +115,7 @@ public class Similarity {
         //Closing br1 after reading all movies and closing writer
         br2.close();
         writer.close();
+        br1.close();
     }
 
 }
