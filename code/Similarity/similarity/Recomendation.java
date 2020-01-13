@@ -3,6 +3,8 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,6 +30,11 @@ public class Recomendation {
 
         // Open file connection
         BufferedReader br1 = new BufferedReader(new FileReader(pathToCsv));
+        // Creat List of selected movie
+        ArrayList<String> selected_movie = new ArrayList<String>();
+        for (Map.Entry entry : usersScores.entrySet()){
+            selected_movie.add(String.valueOf(entry.getKey()));
+        }
 
         // First Row of 30 selected movieId
         String line1 = null;
@@ -59,30 +66,29 @@ public class Recomendation {
 
             // Adding to selected recomendation
 
-
-            // not enough movie was alredy selected
-            if (zwrot.size() < number_of_recomendation) {
-                zwrot.put(movieIndex1, final_prediction);
-            }
-            else {
-                // Calcullating max and minimal value in alredy recomendet
-                Double min = Double.valueOf(100000);
-
-                String min_key = "-";
-                for (Map.Entry entry : zwrot.entrySet()) {
-                    if ((Double) entry.getValue() < min) {
-                        min = (Double) entry.getValue();
-                        min_key = (String) entry.getKey();
-                    }
-                }
-                // Finally adding if its nessesery
-                if (min < final_prediction) {
-                    zwrot.remove(min_key);
+            if  (!(selected_movie.contains(movieIndex1))) {
+                // not enough movie was alredy selected
+                if (zwrot.size() < number_of_recomendation) {
                     zwrot.put(movieIndex1, final_prediction);
+                } else {
+                    // Calcullating max and minimal value in alredy recomendet
+                    Double min = Double.valueOf(100000);
+
+                    String min_key = "-";
+                    for (Map.Entry entry : zwrot.entrySet()) {
+                        if ((Double) entry.getValue() < min) {
+                            min = (Double) entry.getValue();
+                            min_key = (String) entry.getKey();
+                        }
+                    }
+                    // Finally adding if its nessesery
+                    if (min < final_prediction) {
+                        zwrot.remove(min_key);
+                        zwrot.put(movieIndex1, final_prediction);
+                    }
+
                 }
-
             }
-
 
         }
         br1.close();
