@@ -6,11 +6,11 @@ public class TableModel extends AbstractTableModel {
     final List<Movie> modelList;
 
     final String[] columnNames = new String[] {
-            "Title", "Score"
+            "Title", "Score", "Number"
     };
 
     final Class[] columnClass = new Class[] {
-            String.class, Double.class
+            String.class, Double.class, Double.class
     };
 
     TableModel(List<Movie> modelList){
@@ -43,7 +43,7 @@ public class TableModel extends AbstractTableModel {
         if(0 == columnIndex){
             return row.getTitle();
         }
-        else if(1 == columnIndex){
+        else if(1 == columnIndex || 2==columnIndex){
             return row.getScore();
         }
         return null;

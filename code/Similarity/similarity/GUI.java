@@ -1,4 +1,5 @@
 import javax.swing.*;
+import javax.swing.table.TableColumn;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -6,6 +7,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Vector;
 
 public class GUI {
 
@@ -31,6 +33,11 @@ public class GUI {
         //Table with scores
         TableModel model = new TableModel(moviesToGUI);
         JTable table = new JTable(model);
+
+        TableColumn col = table.getColumnModel().getColumn(1);
+
+        col.setCellEditor(new SliderEditor(JSlider.HORIZONTAL, 0, 10, 0));
+        col.setCellRenderer(new SliderRenderer(JSlider.HORIZONTAL, 0, 10, 0));
 
         JButton runPrediction = new JButton("Give prediction");
 
@@ -60,10 +67,10 @@ public class GUI {
 
                 for (int i = 0; i < 30; i++) {
                     Movie scoredMovie = model.modelList.get(i);
-                    usersScores.put(scoredMovie.getId(), scoredMovie.getScore());
+                    usersScores.put(scoredMovie.getId(), scoredMovie.getScore()/2);
                 }
 
-                Recomendation recomendation = new Recomendation(usersScores, "/home/piotr/IdeaProjects/zpoif-projekt-2019-rekomender/SimilarityMatrix/similarityMatrix.csv");
+                Recomendation recomendation = new Recomendation(usersScores, "/home/piotr/Pulpit/similarityMatrix_test.csv");
                 try {
 
                     Map<String, Double> result = recomendation.calcullateRecomendation(10);
@@ -75,6 +82,8 @@ public class GUI {
                         output.append(String.valueOf(i) + ". " + title + "\n");
                         i += 1;
                     }
+
+                    result.clear();
 
                     //output.setText(prediction);
                 } catch (IOException e1) {
