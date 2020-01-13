@@ -1,38 +1,42 @@
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import javax.swing.table.TableCellEditor;
 import java.awt.*;
 
-public class SliderEditor extends DefaultCellEditor {
-    protected JSlider slider;
+public class SliderEditor extends AbstractCellEditor implements TableCellEditor {
+    JPanel panel;
+    JSlider slider;
+    JTextArea txt;
 
-    public SliderEditor(int orientation, int min, int max, int value) {
-        super(new JCheckBox());
-        slider = new JSlider(orientation, min, max, value);
-        slider.setOpaque(true);
+    public SliderEditor() {
+        panel = new JPanel();
+        panel.setLayout(new FlowLayout());
+        slider = new JSlider(SwingConstants.HORIZONTAL,0,10, 0);
+        slider.setSize(150, 50);
+        txt  = new JTextArea();
+
+        panel.add(slider);
+        panel.add(txt);
+        panel.setVisible(true);
     }
 
     public Component getTableCellEditorComponent(JTable table, Object value,
                                                  boolean isSelected, int row, int column) {
-        if (isSelected) {
-            slider.setForeground(table.getSelectionForeground());
-            slider.setBackground(table.getSelectionBackground());
-        } else {
-            slider.setForeground(table.getForeground());
-            slider.setBackground(table.getBackground());
-        }
+        slider.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                JSlider source = (JSlider) e.getSource();
+                txt.setText("" + source.getValue());
+            }
+        });
         slider.setValue(((Double) value).intValue());
 
-        return slider;
+        return panel;
     }
 
     public Object getCellEditorValue() {
-        return new Double(slider.getValue());
+        return (double) slider.getValue();
     }
 
-    public boolean stopCellEditing() {
-        return super.stopCellEditing();
-    }
-
-    protected void fireEditingStopped() {
-        super.fireEditingStopped();
-    }
 }

@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Vector;
 
 public class GUI {
 
@@ -33,28 +32,38 @@ public class GUI {
         //Table with scores
         TableModel model = new TableModel(moviesToGUI);
         JTable table = new JTable(model);
+        table.setRowHeight(50);
 
-        TableColumn col = table.getColumnModel().getColumn(1);
+        TableColumn col2 = table.getColumnModel().getColumn(1);
 
-        col.setCellEditor(new SliderEditor(JSlider.HORIZONTAL, 0, 10, 0));
-        col.setCellRenderer(new SliderRenderer(JSlider.HORIZONTAL, 0, 10, 0));
+        col2.setPreferredWidth(200);
+        col2.setCellEditor(new SliderEditor());
+        col2.setCellRenderer(new CellRenderer());
+
+        TableColumn col1 = table.getColumnModel().getColumn(0);
+        col1.setPreferredWidth(400);
 
         JButton runPrediction = new JButton("Give prediction");
 
-        JTextArea output = new JTextArea();
 
-        leftPanel.add(new JScrollPane(table), "Center");
-        leftPanel.add(runPrediction, "South");
 
-        frame.getContentPane().add(leftPanel, "West");
+        JScrollPane forTable = new JScrollPane(table);
 
+//        leftPanel.add(forTable, "North");
+//        leftPanel.add(runPrediction, "South");
+
+        JSplitPane splitLeft = new JSplitPane(JSplitPane.VERTICAL_SPLIT, forTable, runPrediction);
+        leftPanel.add(splitLeft, "North");
 
         JPanel rightPanel = new JPanel();
         rightPanel.setLayout(new BorderLayout());
 
+        JTextArea output = new JTextArea();
         rightPanel.add(output, "Center");
 
-        frame.getContentPane().add(rightPanel, "East");
+        JSplitPane split = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftPanel, rightPanel);
+
+        frame.add(split);
 
         runPrediction.addActionListener(new ActionListener() {
             @Override
@@ -85,13 +94,13 @@ public class GUI {
 
                     result.clear();
 
-                    //output.setText(prediction);
                 } catch (IOException e1) {
                     e1.printStackTrace();
                 }
             }
         });
 
+        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
