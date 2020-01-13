@@ -33,7 +33,9 @@ public class Recomendation {
         // Creat List of selected movie
         ArrayList<String> selected_movie = new ArrayList<String>();
         for (Map.Entry entry : usersScores.entrySet()){
-            selected_movie.add(String.valueOf(entry.getKey()));
+            if ((Double) entry.getValue() >0) {
+                selected_movie.add(String.valueOf(entry.getKey()));
+            }
         }
 
         // First Row of 30 selected movieId
