@@ -22,7 +22,11 @@ public class MovieReader {
         while ((line1 = br1.readLine()) != null) {
             //Row to array of string
             String[] row2 = line1.split(",");
-            movies.put(row2[1], row2[2]);
+            if(row2.length >= 4){
+                movies.put(row2[1], row2[2].concat(row2[3]));
+            }else{
+                movies.put(row2[1], row2[2]);
+            }
         }
         br1.close();
         return movies;
@@ -80,8 +84,13 @@ public class MovieReader {
             //Adding movie to list user score movies
             Integer id = Integer.valueOf(row2[1]);
             if(toScoreID.contains(id)){
+                if(row2.length >= 4){
+                    Movie nextMovie = new Movie(row2[2]+row2[3], row2[1], 0);
+                    tableList.add(nextMovie);
+                }else{
                 Movie nextMovie = new Movie(row2[2], row2[1], 0);
                 tableList.add(nextMovie);
+                }
             }
         }
         br1.close();

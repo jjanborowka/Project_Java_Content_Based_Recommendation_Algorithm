@@ -79,7 +79,7 @@ public class GUI {
                     usersScores.put(scoredMovie.getId(), scoredMovie.getScore()/2);
                 }
 
-                Recomendation recomendation = new Recomendation(usersScores, "/home/piotr/Pulpit/similarityMatrix_test.csv");
+                Recomendation recomendation = new Recomendation(usersScores, "/home/piotr/IdeaProjects/Projekt_java/similarityMatrix_test.csv");
                 try {
 
                     Map<String, Double> result = recomendation.calcullateRecomendation(10);
