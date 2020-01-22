@@ -1,12 +1,18 @@
 import javax.swing.*;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
+import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableColumn;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 
 public class GUI {
 
@@ -17,11 +23,15 @@ public class GUI {
 
         //Preparing data for algorithm and app
         MovieReader movieReader = new MovieReader();
-        HashMap<String, String> allTitles = movieReader.readAllTitles("/home/piotr/IdeaProjects/Projekt_java/code/Similarity/similarity/Movies.csv");
-        List<Movie> moviesToGUI = movieReader.readScoreMovies("/home/piotr/IdeaProjects/Projekt_java/code/Similarity/similarity/Movies.csv");
+        HashMap<String, String> allTitles = movieReader.readAllTitles("/home/jan/Pulpit/Movies.csv");
+        List<Movie> moviesToGUI = movieReader.readScoreMovies("/home/jan/Pulpit/Movies.csv");
 
         //GUI
+
+
+
         JPanel topPanel = new JPanel();
+        topPanel.setBackground(Color.BLUE);
         JLabel topText = new JLabel("Please score 10 movies");
         topPanel.add(topText, "Center");
         frame.getContentPane().add(topPanel, "North");
@@ -31,10 +41,18 @@ public class GUI {
 
         //Table with scores
         TableModel model = new TableModel(moviesToGUI);
+
+
         JTable table = new JTable(model);
+
+
+
+
         table.setRowHeight(50);
 
+
         TableColumn col2 = table.getColumnModel().getColumn(1);
+
 
         col2.setPreferredWidth(200);
         col2.setCellEditor(new SliderEditor());
@@ -44,17 +62,17 @@ public class GUI {
         col1.setPreferredWidth(400);
 
         JButton runPrediction = new JButton("Give prediction");
-
-
-
         JScrollPane forTable = new JScrollPane(table);
+        runPrediction.setEnabled(false);
 
 //        leftPanel.add(forTable, "North");
 //        leftPanel.add(runPrediction, "South");
 
         JSplitPane splitLeft = new JSplitPane(JSplitPane.VERTICAL_SPLIT, forTable, runPrediction);
-        leftPanel.add(splitLeft, "North");
-
+        splitLeft.setResizeWeight(0.9);
+        leftPanel.add(splitLeft);
+        splitLeft.setPreferredSize(new Dimension(800, 30));
+        splitLeft.setVisible(true);
         JPanel rightPanel = new JPanel();
         rightPanel.setLayout(new BorderLayout());
 
@@ -63,8 +81,27 @@ public class GUI {
 
         JSplitPane split = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftPanel, rightPanel);
 
-        frame.add(split);
+        table.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusLost(FocusEvent e) {
+                TableCellEditor tce = table.getCellEditor();
+                if(tce != null){
+                    int j = 0;
+                    for (int i = 0; i < 30; i++) {
+                        Movie scoredMovie = model.modelList.get(i);
+                        if (scoredMovie.score>0){j+=1; }
 
+                    }
+                    if (j>=9){
+                        runPrediction.setEnabled(true);
+                    }
+                }
+
+            }
+        });
+
+
+        frame.add(split);
         runPrediction.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -79,7 +116,7 @@ public class GUI {
                     usersScores.put(scoredMovie.getId(), scoredMovie.getScore()/2);
                 }
 
-                Recomendation recomendation = new Recomendation(usersScores, "/home/piotr/IdeaProjects/Projekt_java/similarityMatrix_test.csv");
+                Recomendation recomendation = new Recomendation(usersScores, "/home/jan/Pulpit/similarityMatrix_test.csv");
                 try {
 
                     Map<String, Double> result = recomendation.calcullateRecomendation(10);

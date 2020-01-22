@@ -32,6 +32,7 @@ public class SliderEditor extends AbstractCellEditor implements TableCellEditor 
         });
         slider.setValue(((Double) value).intValue());
 
+
         return panel;
     }
 

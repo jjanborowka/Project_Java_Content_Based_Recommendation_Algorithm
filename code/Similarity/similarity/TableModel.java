@@ -1,10 +1,11 @@
+import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
 import java.util.List;
 
 public class TableModel extends AbstractTableModel {
 
     final List<Movie> modelList;
-
+    int j;
     final String[] columnNames = new String[] {
             "Title", "Your rate", "Scored"
     };
@@ -59,6 +60,15 @@ public class TableModel extends AbstractTableModel {
     @Override
     public void setValueAt(Object aValue, int rowIndex, int columnIndex){
         Movie row = modelList.get(rowIndex);
+        int j = 0 ;
+        for (int i = 0; i < 30; i++) {
+            if (modelList.get(i).getScore()>0){
+                j+=1;
+            }
+
+        }
+
+
 
         if(0 == columnIndex){
             row.setTitle((String) aValue);

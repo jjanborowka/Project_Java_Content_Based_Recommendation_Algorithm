@@ -1,6 +1,7 @@
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.plaf.ColorUIResource;
 import javax.swing.table.TableCellRenderer;
 import java.awt.*;
 
@@ -23,10 +24,11 @@ public class CellRenderer implements TableCellRenderer {
                 txt.setText("" + source.getValue());
             }
         });
-
+        txt.setBackground(new ColorUIResource(238,238,238));
         panel.add(slider);
         panel.add(txt);
         panel.setVisible(true);
+
     }
 
     @Override
