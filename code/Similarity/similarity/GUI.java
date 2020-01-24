@@ -18,17 +18,25 @@ public class GUI {
 
     public static void main(String[] args) throws IOException {
 
+        //path to Movies.csv
+        String moviesPath = System.getProperty("user.dir");
+        moviesPath += "/code/Similarity/similarity/Movies.csv";
+
+        //path to similaritymatrix
+        String sMatrixPath = System.getProperty("user.dir");
+        sMatrixPath += "/similarityMatrix_test.csv";
+
         JFrame frame = new JFrame("Movie Recommender");
         frame.setSize(new Dimension(1000, 600));
 
         //Preparing data for algorithm and app
         MovieReader movieReader = new MovieReader();
-        HashMap<String, String> allTitles = movieReader.readAllTitles("/home/jan/Pulpit/Movies.csv");
-        List<Movie> moviesToGUI = movieReader.readScoreMovies("/home/jan/Pulpit/Movies.csv");
+
+
+        HashMap<String, String> allTitles = movieReader.readAllTitles(moviesPath);
+        List<Movie> moviesToGUI = movieReader.readScoreMovies(moviesPath);
 
         //GUI
-
-
 
         JPanel topPanel = new JPanel();
         topPanel.setBackground(Color.BLUE);
@@ -42,17 +50,11 @@ public class GUI {
         //Table with scores
         TableModel model = new TableModel(moviesToGUI);
 
-
         JTable table = new JTable(model);
-
-
-
 
         table.setRowHeight(50);
 
-
         TableColumn col2 = table.getColumnModel().getColumn(1);
-
 
         col2.setPreferredWidth(200);
         col2.setCellEditor(new SliderEditor());
@@ -92,7 +94,7 @@ public class GUI {
                         if (scoredMovie.score>0){j+=1; }
 
                     }
-                    if (j>=9){
+                    if (j>9){
                         runPrediction.setEnabled(true);
                     }
                 }
@@ -102,6 +104,9 @@ public class GUI {
 
 
         frame.add(split);
+
+
+        String finalSMatrixPath = sMatrixPath;
         runPrediction.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -116,7 +121,7 @@ public class GUI {
                     usersScores.put(scoredMovie.getId(), scoredMovie.getScore()/2);
                 }
 
-                Recomendation recomendation = new Recomendation(usersScores, "/home/jan/Pulpit/similarityMatrix_test.csv");
+                Recomendation recomendation = new Recomendation(usersScores, finalSMatrixPath);
                 try {
 
                     Map<String, Double> result = recomendation.calcullateRecomendation(10);
