@@ -3,6 +3,7 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableColumn;
+import javax.swing.text.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -13,7 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
+//// ZDJETY LIMIT /////
 public class GUI {
 
     public static void main(String[] args) throws IOException {
@@ -66,7 +67,7 @@ public class GUI {
 
         JButton runPrediction = new JButton("Give prediction");
         JScrollPane forTable = new JScrollPane(table);
-        runPrediction.setEnabled(false);
+        runPrediction.setEnabled(true);
 
 //        leftPanel.add(forTable, "North");
 //        leftPanel.add(runPrediction, "South");
@@ -79,8 +80,20 @@ public class GUI {
         JPanel rightPanel = new JPanel();
         rightPanel.setLayout(new BorderLayout());
 
-        JTextArea output = new JTextArea();
-        rightPanel.add(output, "Center");
+        JTextPane output = new JTextPane();
+        output.setFont(new Font("Serif", Font.BOLD, 25));
+        SimpleAttributeSet center = new SimpleAttributeSet();
+        StyleConstants.setAlignment(center, StyleConstants.ALIGN_CENTER);
+        /// Centering
+        output.setEditorKit(new MyEditorKit());
+        SimpleAttributeSet attrs=new SimpleAttributeSet();
+        StyleConstants.setAlignment(attrs,StyleConstants.ALIGN_CENTER);
+        StyledDocument doc=(StyledDocument)output.getDocument();
+        doc.setParagraphAttributes(0,doc.getLength()-1,attrs,false);
+
+
+
+        rightPanel.add(output);
 
         JSplitPane split = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftPanel, rightPanel);
 
@@ -131,13 +144,14 @@ public class GUI {
                     int i = 1;
                     for (String bestId:result.keySet()) {
                         String title = allTitles.get(bestId);
-                        output.append(String.valueOf(i) + ". " + title + "\n");
+                        Document ins = output.getDocument();
+                        ins.insertString(ins.getLength(),String.valueOf(i) + ". " + title + "\n",null);
                         i += 1;
                     }
 
                     result.clear();
 
-                } catch (IOException e1) {
+                } catch (IOException | BadLocationException e1) {
                     e1.printStackTrace();
                 }
             }
