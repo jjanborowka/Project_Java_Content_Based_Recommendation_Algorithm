@@ -31,8 +31,6 @@ public class GUI {
 
         //Preparing data for algorithm and app
         MovieReader movieReader = new MovieReader();
-
-
         HashMap<String, String> allTitles = movieReader.readAllTitles(moviesPath);
         List<Movie> moviesToGUI = movieReader.readScoreMovies(moviesPath);
 
@@ -52,15 +50,18 @@ public class GUI {
 
         JTable table = new JTable(model);
 
-        table.setRowHeight(50);
+        TableColumn col0 = table.getColumnModel().getColumn(0);
+        col0.setPreferredWidth(98);
 
-        TableColumn col2 = table.getColumnModel().getColumn(1);
+        table.setRowHeight(140);
+
+        TableColumn col2 = table.getColumnModel().getColumn(2);
 
         col2.setPreferredWidth(200);
         col2.setCellEditor(new SliderEditor());
         col2.setCellRenderer(new CellRenderer());
 
-        TableColumn col1 = table.getColumnModel().getColumn(0);
+        TableColumn col1 = table.getColumnModel().getColumn(1);
         col1.setPreferredWidth(400);
 
         JButton runPrediction = new JButton("Give prediction");

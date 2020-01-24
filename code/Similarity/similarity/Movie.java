@@ -1,4 +1,7 @@
+import javax.swing.*;
+
 public class Movie {
+    ImageIcon poster;
     String title;
     String id;
     double score;
@@ -7,7 +10,8 @@ public class Movie {
         return id;
     }
 
-    public Movie(String title, String id, double score) {
+    public Movie(ImageIcon poster, String title, String id, double score) {
+        this.poster = poster;
         this.title = title;
         this.id = id;
         this.score = score;
@@ -28,4 +32,6 @@ public class Movie {
     public double getScore() {
         return score;
     }
+
+    public ImageIcon getPoster() {return poster;}
 }

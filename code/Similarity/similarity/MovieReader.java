@@ -1,3 +1,4 @@
+import javax.swing.*;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -77,23 +78,36 @@ public class MovieReader {
         toScoreID.add(6874); // Kill Bill: Vol. 1
         toScoreID.add(10); //GoldenEye
 
+
+        String iconPath = System.getProperty("user.dir");
+        iconPath += "/posters/";
+
+        int it = 1;
+
         while ((line1 = br1.readLine()) != null) {
             //Row to array of string
             String[] row2 = line1.split(",");
+
+            //reading icon
+            ImageIcon icon = new ImageIcon(iconPath+ it +".jpg");
 
             //Adding movie to list user score movies
             Integer id = Integer.valueOf(row2[1]);
             if(toScoreID.contains(id)){
                 if(row2.length >= 4){
-                    Movie nextMovie = new Movie(row2[2]+row2[3], row2[1], 0);
+                    Movie nextMovie = new Movie(icon,row2[2]+row2[3], row2[1], 0);
                     tableList.add(nextMovie);
                 }else{
-                Movie nextMovie = new Movie(row2[2], row2[1], 0);
-                tableList.add(nextMovie);
+                    Movie nextMovie = new Movie(icon, row2[2], row2[1], 0);
+                    tableList.add(nextMovie);
                 }
+                it+=1;
             }
+
         }
         br1.close();
+
+
         return tableList;
     }
 }
