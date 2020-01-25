@@ -3,6 +3,9 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.plaf.ColorUIResource;
 import javax.swing.table.TableCellRenderer;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.StyledDocument;
 import java.awt.*;
 
 public class CellRenderer implements TableCellRenderer {
@@ -12,9 +15,9 @@ public class CellRenderer implements TableCellRenderer {
 
     public CellRenderer(){
         panel = new JPanel();
-        panel.setLayout(new FlowLayout());
+        panel.setLayout(new GridBagLayout());
         slider = new JSlider(SwingConstants.HORIZONTAL,0,10, 0);
-        slider.setSize(150, 50);
+        slider.setSize(600, 50);
         txt  = new JTextArea("0");
 
         slider.addChangeListener(new ChangeListener() {

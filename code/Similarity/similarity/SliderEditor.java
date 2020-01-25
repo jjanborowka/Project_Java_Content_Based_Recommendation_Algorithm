@@ -11,10 +11,11 @@ public class SliderEditor extends AbstractCellEditor implements TableCellEditor 
 
     public SliderEditor() {
         panel = new JPanel();
-        panel.setLayout(new FlowLayout());
+        panel.setLayout(new GridBagLayout());
         slider = new JSlider(SwingConstants.HORIZONTAL,0,10, 0);
-        slider.setSize(150, 50);
-        txt  = new JTextArea();
+        slider.setSize(600, 50);
+        txt  = new JTextArea("");
+        //txt.setBackground();
 
         panel.add(slider);
         panel.add(txt);

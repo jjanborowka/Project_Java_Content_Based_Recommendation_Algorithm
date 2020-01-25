@@ -1,6 +1,7 @@
 import javax.swing.*;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
+import javax.swing.plaf.ColorUIResource;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableColumn;
 import javax.swing.text.*;
@@ -39,7 +40,7 @@ public class GUI {
 
         JPanel topPanel = new JPanel();
         topPanel.setBackground(Color.BLUE);
-        JLabel topText = new JLabel("Please score 10 movies");
+        JLabel topText = new JLabel("1");
         topPanel.add(topText, "Center");
         frame.getContentPane().add(topPanel, "North");
 
@@ -80,22 +81,39 @@ public class GUI {
         JPanel rightPanel = new JPanel();
         rightPanel.setLayout(new BorderLayout());
 
+        JPanel backOutput = new JPanel();
+        backOutput.setLayout(new GridBagLayout());
+
         JTextPane output = new JTextPane();
         output.setFont(new Font("Serif", Font.BOLD, 25));
-        SimpleAttributeSet center = new SimpleAttributeSet();
-        StyleConstants.setAlignment(center, StyleConstants.ALIGN_CENTER);
+        Style outputText = output.addStyle("", null);
+        StyleConstants.setForeground(outputText, Color.white);
+        StyleConstants.setBackground(outputText, new ColorUIResource(36, 34, 34));
+
+//        SimpleAttributeSet center = new SimpleAttributeSet();
+//        StyleConstants.setAlignment(center, StyleConstants.ALIGN_CENTER);
+
+        output.setEditable(false);
+
         /// Centering
-        output.setEditorKit(new MyEditorKit());
+        //output.setEditorKit(new MyEditorKit());
         SimpleAttributeSet attrs=new SimpleAttributeSet();
         StyleConstants.setAlignment(attrs,StyleConstants.ALIGN_CENTER);
-        StyledDocument doc=(StyledDocument)output.getDocument();
-        doc.setParagraphAttributes(0,doc.getLength()-1,attrs,false);
+        //StyledDocument doc=(StyledDocument)output.getDocument();
+        //doc.setParagraphAttributes(0,doc.getLength()-1,attrs,false);
+
+        backOutput.setSize(400, 600);
+        backOutput.add(output);
+        rightPanel.add(backOutput);
 
 
-
-        rightPanel.add(output);
+        backOutput.setBackground(new ColorUIResource(92,92,92));
 
         JSplitPane split = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftPanel, rightPanel);
+        split.setResizeWeight(0.142);
+
+
+
 
         table.addFocusListener(new FocusAdapter() {
             @Override
@@ -119,6 +137,8 @@ public class GUI {
 
         frame.add(split);
 
+        output.setBackground(new ColorUIResource(92, 92, 92));
+
 
         String finalSMatrixPath = sMatrixPath;
         runPrediction.addActionListener(new ActionListener() {
@@ -126,6 +146,7 @@ public class GUI {
             public void actionPerformed(ActionEvent e) {
 
                 output.setText("");
+                output.setBackground(new ColorUIResource(36, 34, 34));
 
                 //READING SCORES
                 HashMap<String, Double> usersScores = new HashMap<>();
@@ -145,7 +166,11 @@ public class GUI {
                     for (String bestId:result.keySet()) {
                         String title = allTitles.get(bestId);
                         Document ins = output.getDocument();
-                        ins.insertString(ins.getLength(),String.valueOf(i) + ". " + title + "\n",null);
+                        if (i<10) {
+                            ins.insertString(ins.getLength(), String.valueOf(i) + ".   " + title + "\n", outputText);
+                        }else {
+                            ins.insertString(ins.getLength(), String.valueOf(i) + ". " + title, outputText);
+                        }
                         i += 1;
                     }
 
