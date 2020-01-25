@@ -10,7 +10,7 @@ public class Main {
 
     public static void main(String[] args) throws IOException{
 
-        //Recomen_tests.test();
+        //Similarity.test();
         /*
         //List of movies' ids which were scored by user
         ArrayList<Integer> userScoredMovies = new ArrayList<>();

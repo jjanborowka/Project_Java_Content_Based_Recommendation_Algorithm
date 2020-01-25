@@ -71,7 +71,6 @@ public class TableModel extends AbstractTableModel {
             }
 
         }
-
         if(1 == columnIndex){
             row.setTitle((String) aValue);
         }
