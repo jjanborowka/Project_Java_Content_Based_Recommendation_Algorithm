@@ -75,16 +75,17 @@ public class GUI {
 
         //column nr 3 background
         TableColumn col3 = table.getColumnModel().getColumn(3);
-        
+
         //prediction button
         JButton runPrediction = new JButton("Give prediction");
+        JScrollPane forTable = new JScrollPane(table);
         runPrediction.setEnabled(true);
 
         //scrolling panel for table
-        JScrollPane forTable = new JScrollPane(table);
+        JScrollPane forTable1 = new JScrollPane(table);
 
         //Left side splitter
-        JSplitPane splitLeft = new JSplitPane(JSplitPane.VERTICAL_SPLIT, forTable, runPrediction);
+        JSplitPane splitLeft = new JSplitPane(JSplitPane.VERTICAL_SPLIT, forTable1, runPrediction);
         splitLeft.setResizeWeight(0.9);
         leftPanel.add(splitLeft);
         splitLeft.setPreferredSize(new Dimension(800, 30));
@@ -116,8 +117,14 @@ public class GUI {
         SimpleAttributeSet attrs=new SimpleAttributeSet();
         StyleConstants.setAlignment(attrs,StyleConstants.ALIGN_CENTER);
 
+        JButton clear_scores  = new JButton("Clear scores");
+
         //Split for left and right parts
-        JSplitPane split = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftPanel, rightPanel);
+        JSplitPane rightPanel_split  = new JSplitPane(JSplitPane.VERTICAL_SPLIT,rightPanel,clear_scores);
+        rightPanel_split.setResizeWeight(0.943);
+
+
+        JSplitPane split = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftPanel, rightPanel_split);
         split.setResizeWeight(0.142);
         frame.add(split);
 
@@ -181,6 +188,18 @@ public class GUI {
                 }
             }
         });
+
+        clear_scores.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                for (int i = 0; i < 30; i++) {
+
+                    model.setValueAt(0.0,i,2);
+
+                }
+                model.fireTableRowsUpdated(0,29);
+
+            }});
 
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         frame.setVisible(true);

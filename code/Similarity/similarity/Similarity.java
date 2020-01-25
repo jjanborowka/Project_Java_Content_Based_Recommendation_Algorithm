@@ -1,84 +1,121 @@
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 public class Similarity {
 
-    public Similarity() throws IOException {
+    //IDs of movies which user scores
+    ArrayList<Integer> userScoreMoviesId;
 
+    public Similarity(ArrayList<Integer> userScoreMoviesId) {
+        this.userScoreMoviesId = userScoreMoviesId;
     }
-    public static void test() throws IOException {
-        Matrix dane = new Matrix("/home/jan/Pulpit/ml-latest/ratings1.csv");
-        FileWriter writer = new FileWriter("/home/jan/Pulpit/similarityMatrix_test.csv");
-        List<Integer> selected = new ArrayList<>();
-        selected.add(1);
-        selected.add(318);
-        selected.add(356);
-        selected.add(296);
-        selected.add(593);
-        selected.add(2571);
-        selected.add(260);
-        selected.add(480);
-        selected.add(527);
-        selected.add(110);
-        selected.add(2959);
-        selected.add(72998);
-        selected.add(89745);
-        selected.add(589);
-        selected.add(1198);
-        selected.add(50);
-        selected.add(4993);
-        selected.add(858);
-        selected.add(2858);
-        selected.add(780);
-        selected.add(150);
-        selected.add(47);
-        selected.add(3578);
-        selected.add(344);
-        selected.add(1193);
-        selected.add(1265);
-        selected.add(1036);
-        selected.add(1214);
-        selected.add(6874);
-        selected.add(10);
 
+
+    //Method for calculating similarity matrix
+    void calculateSimilarity(String pathToCSV) throws IOException {
+
+        //Opening writer to append calculated similarities directly to csv file
+        FileWriter writer = new FileWriter("/home/jan/Pulpit/similarityMatrix1.csv");
+
+        //Additional reader to read all movies scored by user
+        BufferedReader br1 = new BufferedReader(new FileReader(pathToCSV));
+
+        //Adding user scored movies' indexes as first row
+        br1.readLine();
+        String line1 = null;
         writer.append("-");
-        for (int i = 0; i < selected.size(); i++) {
-            writer.append(",");
-            writer.append(String.valueOf(selected.get(i)));
+
+        //Array (matrix) for rows of 30 user scored movies
+        ArrayList<String []> userMovies = new ArrayList<>();
+
+        while ((line1 = br1.readLine()) != null) {
+
+            //Row to array of string
+            String[] row1 = line1.split(",");
+
+            //Checking if current row-movie is in 30 scored by user
+            if(userScoreMoviesId.contains(Integer.valueOf(row1[0].substring(1, row1[0].length()-1)))) {
+
+                //Getting current movie index from first place of each row
+                //because it's read as "1", using substring
+                String movieIndex1 = row1[1];
+                writer.append(",");
+                writer.append(movieIndex1);
+
+                //Appending to array
+                userMovies.add(row1);
+            }
         }
         writer.append("\n");
-        int d = 1 ;
-        for (Map.Entry entry : dane.dane.entrySet()) {
-            writer.append(String.valueOf(entry.getKey()));
-            for (int i = 0; i < selected.size(); i++) {
+
+        //Opening reader which will read rows with all movies
+        BufferedReader br2 = new BufferedReader(new FileReader(pathToCSV));
+        br2.readLine();
+        String line = null;
+
+        //Start of br2 reading
+        while ((line = br2.readLine()) != null) {
+
+            //Row to array of string
+            String[] row = line.split(",");
+
+            //Getting current movie index from first place of each row
+            //because it's read as "1", using substring
+            String movieIndex = row[1];
+
+            //Starting new line in result csv with movie index
+            writer.append(movieIndex);
+
+            //Iterating through user scored movies
+            for (int i = 0; i < userMovies.size(); i++) {
+
+                //Calculating cosine similarity
+                int n = row.length;
+
                 double dotProduct = 0.0;
                 double normA = 0.0;
                 double normB = 0.0;
-                for (Map.Entry entry1 : dane.dane.get(Integer.valueOf(selected.get(i))).entrySet()) {
-                   if( ((HashMap<Integer,String>)entry.getValue()).containsKey(entry1.getKey())){
-                       double val1 =  Double.valueOf(((HashMap<Integer,String>)entry.getValue()).get(entry1.getKey()));
-                       double val2 =  Double.valueOf((String) entry1.getValue());
-                       dotProduct += val1 * val2;
-                       normA += Math.pow(val1, 2);
-                       normB += Math.pow(val2, 2);
-                    }
-                    
-                }
-                double similarity = dotProduct / (Math.sqrt(normA) * Math.sqrt(normB));
-                d +=1;
-                System.out.println(d);
 
+                //Getting next user scored movie row
+                String[] row2 = userMovies.get(i);
+
+                //Iterating through all values of ratings given by users
+                //which means iterating the rows
+                for (int j = 2; j < n; j++) {
+
+                    //Vectors used to calculate cosine similarity
+                    //must contain only these ratings which were given
+                    //by one user to both movies
+                    if (!(row[j].equals("NA")) & !(row2[j].equals("NA"))) {
+
+                        //String to double
+                        double val = Double.valueOf(row[j]);
+                        double val2 = Double.valueOf(row2[j]);
+
+                        //Calculating dot product and norms
+                        dotProduct += val * val2;
+                        normA += Math.pow(val, 2);
+                        normB += Math.pow(val2, 2);
+                    }
+                }
+
+                //Final similarity of pair of movies
+                double similarity = dotProduct / (Math.sqrt(normA) * Math.sqrt(normB));
+
+                //Writing value to csv
                 writer.append(",");
                 writer.append(String.valueOf(similarity));
-                
             }
-        writer.append("\n");
-            
+
+            //After calculating all values for pairs of one movie and all scored by user
+            //starting new line in csv
+            writer.append("\n");
         }
 
+        //Closing br1 after reading all movies and closing writer
+        br2.close();
+        writer.close();
+        br1.close();
     }
+
 }
