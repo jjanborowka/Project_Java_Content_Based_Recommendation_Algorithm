@@ -1,6 +1,7 @@
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.plaf.ColorUIResource;
 import javax.swing.table.TableCellEditor;
 import java.awt.*;
 
@@ -17,6 +18,7 @@ public class SliderEditor extends AbstractCellEditor implements TableCellEditor 
         txt  = new JTextArea("");
         //txt.setBackground();
 
+        txt.setBackground(new ColorUIResource(238,238,238));
         panel.add(slider);
         panel.add(txt);
         panel.setVisible(true);

@@ -1,6 +1,4 @@
 import javax.swing.*;
-import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
 import javax.swing.plaf.ColorUIResource;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableColumn;
@@ -59,7 +57,7 @@ public class GUI {
 
         TableColumn col2 = table.getColumnModel().getColumn(2);
 
-        col2.setPreferredWidth(200);
+        col2.setPreferredWidth(250);
         col2.setCellEditor(new SliderEditor());
         col2.setCellRenderer(new CellRenderer());
 
@@ -108,8 +106,11 @@ public class GUI {
 
 
         backOutput.setBackground(new ColorUIResource(92,92,92));
-
-        JSplitPane split = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftPanel, rightPanel);
+        JButton clear_scores = new JButton("Clear scores");
+        JSplitPane rightpalen_split = new JSplitPane(JSplitPane.VERTICAL_SPLIT,rightPanel,clear_scores);
+        rightpalen_split.setResizeWeight(0.9429);
+        rightpalen_split.setEnabled(false);
+        JSplitPane split = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftPanel, rightpalen_split);
         split.setResizeWeight(0.142);
 
 
@@ -155,7 +156,6 @@ public class GUI {
                     Movie scoredMovie = model.modelList.get(i);
                     usersScores.put(scoredMovie.getId(), scoredMovie.getScore()/2);
                 }
-
                 Recomendation recomendation = new Recomendation(usersScores, finalSMatrixPath);
                 try {
 
@@ -181,6 +181,18 @@ public class GUI {
                 }
             }
         });
+
+        clear_scores.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                for (int i = 0; i < 30; i++) {
+
+                    model.setValueAt(0.0,i,1);
+
+                }
+                model.fireTableCellUpdated(0,29);
+
+            }});
 
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         frame.setVisible(true);
